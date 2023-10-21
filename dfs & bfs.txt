@@ -1,0 +1,144 @@
+#include <iostream>
+using namespace std;
+
+class Graph{
+    public:
+    int n,u,v;
+    char ch='1';
+   
+ int mat[100][100],visited[100]={0};
+    Graph(){
+    cout<<"Enter the no. of nodes: "<<endl;
+    cin>>n;
+    mat[n][n],visited[n]={0};
+ }
+    void create();
+    void DFS(int );
+    void DFS_non_rec(int );
+    void BFS_non_rec(int );
+};
+class Stack{
+    public:
+    int stack[100],top=-1;
+    void push(int);
+    int pop();
+    bool empty();
+};
+
+class Queue{
+    public:
+    int queue[100],top=0,rear=-1;
+    void enqueue(int);
+    int dequeue();
+    bool empty();
+};
+void Graph::create(){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+        mat[i][j]=0;
+    }
+    }
+    while(ch!='0'){
+    cout<<"Enter the point(u,v): "<<endl;
+    cin>>u>>v;
+   
+    mat[u][v]=1;
+    mat[v][u]=1;
+   
+    cout<<"Do you want add another edge? (1/0)"<<endl;
+    cin>>ch;
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+        cout<<mat[i][j]<<" ";
+    }
+    cout<<'\n';
+    }
+    
+}
+void Graph::DFS(int v1){
+    int v2;
+    cout<<v1<<" ";
+    visited[v1]=1;
+   
+    for(int v2=0;v2<n;v2++){
+        if((mat[v1][v2]==1) && (visited[v2]==0) )
+        DFS(v2);
+        
+    }
+}
+void Graph:: DFS_non_rec(int v1){
+    Stack s;
+    int visited[n]={0};
+    s.push(v1);
+    visited[v1]=1;
+   
+    while(!s.empty()){
+        v1=s.pop();
+        cout<<v1<<" ";
+        for(int v2=0;v2<n;v2++){
+            if(mat[v1][v2]==1&&visited[v2]==0){
+            s.push(v2);
+            visited[v2]=1;
+            }
+        }
+    }
+}
+
+void Graph:: BFS_non_rec(int v1){
+    Queue q;
+    int visited[n]={0};
+    q.enqueue(v1);
+    visited[v1]=1;
+   
+    while(!q.empty()){
+        v1=q.dequeue();
+        cout<<v1<<" ";
+       
+        for(int v2=0;v2<n;v2++){
+            if(mat[v1][v2]==1&&visited[v2]==0){
+            q.enqueue(v2);
+            visited[v2]=1;
+            }
+        }
+    }
+}
+
+void Stack::push(int v1){
+    stack[++top]=v1; }
+void Queue::enqueue(int v1){
+    queue[++rear]=v1;}
+
+int Stack::pop(){
+    return stack[top--]; }
+int Queue::dequeue(){
+    return queue[top++];}
+
+bool Stack::empty(){
+    if(top==-1) return 1;
+    else        return 0;
+}
+bool Queue::empty(){
+    if(top-rear==1) return 1;
+    else    return 0;
+}
+
+
+int main() {
+   int z,ch;
+
+Graph G;
+G.create();
+
+cout<<"Enter the vertex from which you have to start searching: ";
+cin>>z;
+p:cout<<"\n1.DFS(Recursive)\n2.DFS(Non-Recursive)\n3.BFS\n";
+cin>>ch;
+switch(ch){
+    case 1:G.DFS(z);goto p;
+    case 2:G.DFS_non_rec(z);goto p;
+    case 3:G.BFS_non_rec(z);goto p;
+    case 4:break;
+}
+return 0;
+}
